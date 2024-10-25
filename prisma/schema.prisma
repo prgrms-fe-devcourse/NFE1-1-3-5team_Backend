@@ -14,51 +14,65 @@ generator client {
 }
 
 
-
 model UserProfile {
-  id                String   @id @default(auto()) @map("_id") @db.ObjectId
-  user_id           String   // 유저ID(이메일)
+  user_id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  user_email           String   @unique// 유저ID(이메일)
   nickname          String   // 유저닉네임
-  position          String?  // 직무: [프론트엔드, 백엔드, 풀스택, IOS, 안드로이드, 데브옵스, PM, 마케터, 디자이너, 기획자]
-  affiliation       String?  // 소속: [학생, 직장인, 프리랜서, 취업 준비생]
-  interests         String?  // 관심 분야 (기술 스택): [TypeScript, Java, …]
+  position          Position?  // 직무: [프론트엔드, 백엔드, 풀스택, IOS, 안드로이드, 데브옵스, PM, 마케터, 디자이너, 기획자]
+  affiliation       Affiliation?  // 소속: [학생, 직장인, 프리랜서, 취업 준비생]
+  interests         Interests?  // 관심 분야 (기술 스택): [TypeScript, Java, …]
   bio               String?  // 자기소개
   profile_image_url String?  // 프로필이미지
-  like_post         String?  // 관심 포스트 리스트
+  like_post         String[]  // 관심 포스트 리스트
   created_at        DateTime @default(now()) // 생성시간
   updated_at        DateTime @updatedAt // 수정시간
+  
+  
+user_login        UserLogin @relation(fields: [user_id], references: [login_id]) // UserLogin 참조
 }
 
+model UserLogin {
+  login_id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  user_id           String   @unique // 유저ID(이메일)
+  password          String   // 비밀번호
+  is_first_login    Boolean  @default(true) // 첫 로그인 여부
+  last_logined_at   DateTime? // 마지막 로그인 시간
+  login_fail_count  Int      @default(0) // 로그인 실패 횟수
+
+  // user_profile      UserProfile @relation(fields: [login_id], references: [user_id]) // UserProfile 참조
+
+  // user_profile      UserProfile @relation(references: [user_id]) // UserProfile 참조
+}
+
+
 model Post {
-  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId // Post ID
+  type              PostType  // 게시글 타입: [프로젝트, 스터디, 모임]
   user_id           String   // 작성자ID
   title             String   // 게시글 제목
   content           String   // 게시글 내용
-  interests         String?  // 관심 기술 스택
-  position          String?  // 직무
-  participation_method String? // 진행방법
-  recruitment_capacity Int?  // 모집 인원
-  duration          String?  // 예상 기간
-  recruitment_deadline DateTime? // 모집 마감일
+  interests         Interests  // 관심 기술 스택
+  position          Position  // 직무
+  participation_method ParticipationMethod // 진행방법
   created_at        DateTime @default(now()) // 생성시간
   updated_at        DateTime @updatedAt // 수정시간
+
+  // Project Type, Study Type
+  recruitment_capacity Int?  // 모집 인원
+  duration          Duration?  // 예상 기간
+  recruitment_deadline DateTime? // 모집 마감일
+
+  // Meet Type
+  affiliation       Affiliation?  // 소속: [학생, 직장인, 프리랜서, 취업 준비생]
+  available_time    AvaioableTime?  // 가능한 시간대
 }
 
 model Notification {
   id                String   @id @default(auto()) @map("_id") @db.ObjectId
-  notification_id   String   // 알림ID
   user_id           String   // 유저ID
-  post_id           String?  // 포스트ID
+  post_id           String  // 포스트ID
   is_read           Boolean  @default(false) // 알림 읽음 여부
   created_at        DateTime @default(now()) // 생성 시간
-}
-
-model UserLogin {
-  id                String   @id @default(auto()) @map("_id") @db.ObjectId
-  user_id           String   // 유저ID
-  password          String   // 비밀번호
-  last_logined_at   DateTime? // 마지막 로그인 시간
-  login_fail_count  Int      @default(0) // 로그인 실패 횟수
 }
 
 model Chat {
@@ -92,3 +106,90 @@ model File {
 }
 
 
+// enum type 정의
+
+enum Position {
+  FRONTEND
+  BACKEND
+  FULLSTACK
+  IOS
+  ANDROID
+  DEVOPS
+  PM
+  MARKETER
+  DESIGNER
+  PLANNER
+}
+
+enum Affiliation {
+  STUDENT
+  EMPLOYEE
+  FREELANCER
+  JOBSEEKER
+}
+
+enum Interests {
+  UNDETERMINED
+  TYPESCRIPT
+  JAVASCRIPT
+  SWIFT
+  FLUTTER
+  VUE
+  NEXT_JS
+  SVELTE
+  PHP
+  MONGO_DB
+  GO
+  SPRING
+  NEST_JS
+  KIBANA
+  POSTGRESQL
+  PYTHON
+  GRAPHQL
+  MYSQL
+  REACT_JS
+  REACT_NATIVE
+  JEST
+  GIT
+  DOCKER
+  GITHUB
+  KUBERNETES
+  FIGMA
+  NODE_JS
+  DJANGO
+  JAVA
+  FIREBASE
+  AWS
+  GITLAB
+}
+
+enum ParticipationMethod {
+  ONLINE
+  OFFLINE
+  HYBRID
+}
+
+enum Duration {
+  UNDETERMINED
+  ONE_MONTH
+  TWO_MONTH
+  THREE_MONTH
+  FOUR_MONTH
+  FIVE_MONTH
+  SIX_MONTH
+  LONG_TERM
+}
+
+enum PostType {
+  PROJECT
+  STUDY
+  MEET
+}
+
+enum AvaioableTime {
+  LESS_THAN_5
+  MORE_THAN_5
+  MORE_THAN_10
+  MORE_THAN_20
+  MORE_THAN_40
+}
