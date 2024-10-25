@@ -66,7 +66,7 @@ model Post {
 
   // Meet Type
   affiliation       Affiliation?  // 소속: [학생, 직장인, 프리랜서, 취업 준비생]
-  available_time    AvaioableTime?  // 가능한 시간대
+  available_time    AvailableTime?  // 가능한 시간대
 
   // UserProfile과의 관계 설정(N:1)
   userProfile       UserProfile @relation("UserPosts", fields: [user_id], references: [user_id]) 
@@ -191,7 +191,7 @@ enum PostType {
   MEET
 }
 
-enum AvaioableTime {
+enum AvailableTime {
   LESS_THAN_5
   MORE_THAN_5
   MORE_THAN_10
