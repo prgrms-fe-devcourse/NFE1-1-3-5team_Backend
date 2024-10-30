@@ -1,5 +1,5 @@
 import express, { Request, Response, Router } from "express";
-import authRouter from "./routes/authRoutes";
+import auth from "./routes/authRoutes";
 
 const app = express();
 const PORT = 3000;
@@ -13,7 +13,7 @@ app.get("/", (_req: Request, res: Response) => {
 });
 
 // auth 라우트 등록
-app.use("/api", authRouter);
+app.use("/api", auth);
 
 // 서버 실행
 app.listen(PORT, () => {
