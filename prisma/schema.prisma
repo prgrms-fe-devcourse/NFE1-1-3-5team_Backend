@@ -16,7 +16,7 @@ generator client {
 
 model UserProfile {
   user_id            String     @id @default(auto()) @map("_id") @db.ObjectId
-  user_email         String     @unique // 유저ID(이메일)
+  email              String     @unique // 유저ID(이메일)
   nickname           String     // 유저닉네임
   position           Position?  // 직무
   affiliation        Affiliation?  // 소속
@@ -28,7 +28,7 @@ model UserProfile {
   updated_at         DateTime   @updatedAt // 수정시간
 
   // UserLogin과의 관계 설정 (1:1)
-  user_login         UserLogin  @relation(fields: [user_id], references: [user_id]) // UserLogin 참조
+  user_login         UserLogin? @relation("UserLoginRelation")
 
   // Post와의 관계 설정(1:N)
   posts              Post[]     @relation("UserPosts")
@@ -43,7 +43,7 @@ model UserLogin {
   login_fail_count   Int        @default(0) // 로그인 실패 횟수
 
   // UserProfile과의 관계 설정 (1:1)
-  user_profile       UserProfile?  @relation// UserProfile 참조
+  user_profile       UserProfile @relation("UserLoginRelation", fields: [user_id], references: [user_id])
 }
 
 
