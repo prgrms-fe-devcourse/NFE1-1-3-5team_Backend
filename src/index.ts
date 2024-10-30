@@ -13,7 +13,7 @@ app.get("/", (_req: Request, res: Response) => {
 });
 
 // auth 라우트 등록
-app.use("/", authRouter);
+app.use("/api", authRouter);
 
 // 서버 실행
 app.listen(PORT, () => {
