@@ -20,9 +20,9 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    // 해당 프로필의 user_id로 로그인 정보 찾기
+    // 해당 프로필의 email로 로그인 정보 찾기
     const userLogin = await prisma.userLogin.findUnique({
-      where: { user_id: userProfile.user_id },
+      where: { email: userProfile.email },
     });
 
     if (!userLogin) {
@@ -38,7 +38,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
     }
 
     // JWT 토큰 생성
-    const token = jwt.sign({ userId: userProfile.user_id }, "your_jwt_secret", {
+    const token = jwt.sign({ userId: userProfile.id }, "your_jwt_secret", {
       expiresIn: "1h",
     });
 
@@ -70,14 +70,14 @@ export const registerUser = async (
 
     await prisma.userLogin.create({
       data: {
-        user_id: newUserProfile.user_id, // 새로 생성된 userProfile의 user_id
+        email: newUserProfile.email, // 새로 생성된 userProfile의 email
         password: hashedPassword,
       },
     });
 
     // JWT 생성
     const token = jwt.sign(
-      { userId: newUserProfile.user_id },
+      { userId: newUserProfile.id },
       process.env.JWT_SECRET as string,
       { expiresIn: "1h" }
     );
