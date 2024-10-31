@@ -67,7 +67,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 
     const token = generateToken(userProfile.id);
 
-    res.status(200).json({ token });
+    res.status(200).json({ token, is_first_login: userLogin.is_first_login });
   } catch (error) {
     res.status(500).json({ error: "서버 오류가 발생했습니다." });
   }
