@@ -35,6 +35,22 @@ export const createUserLogin = async (email: string, password: string) => {
   });
 };
 
+export const updateUserLoginInfo = async (
+  email: string,
+  isFirstLogin: boolean,
+  lastLoginAt: Date | null,
+  loginFailCount: number
+) => {
+  return prisma.userLogin.update({
+    where: { email },
+    data: {
+      is_first_login: isFirstLogin,
+      last_logined_at: lastLoginAt,
+      login_fail_count: loginFailCount,
+    },
+  });
+};
+
 export const deleteUserProfile = async (email: string) => {
   return prisma.userProfile.delete({
     where: { email },
