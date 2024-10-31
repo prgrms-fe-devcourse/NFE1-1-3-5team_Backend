@@ -11,9 +11,29 @@ import {
 } from "../service/authService";
 import bcrypt from "bcrypt";
 
+// 회원가입 기능
+export const createUser = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const { email, password, nickname } = req.body;
+
+  try {
+    const newUserProfile = await createUserProfile(email, nickname);
+    await createUserLogin(newUserProfile.email, password);
+
+    const token = generateToken(newUserProfile.id);
+
+    res.status(201).json({ token });
+  } catch (error) {
+    res.status(500).json({ error: "회원가입 중 오류가 발생했습니다." });
+  }
+};
+
 // 로그인 기능
 export const loginUser = async (req: Request, res: Response): Promise<void> => {
   const { email, password } = req.body;
+  console.log(email, password);
 
   try {
     const userProfile = await findUserProfileByEmail(email);
@@ -31,6 +51,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
     }
 
     const isPasswordValid = await bcrypt.compare(password, userLogin.password);
+
     if (!isPasswordValid) {
       await updateUserLoginInfo(
         userProfile.email,
@@ -52,25 +73,6 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-// 회원가입 기능
-export const registerUser = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
-  const { email, password, nickname } = req.body;
-
-  try {
-    const newUserProfile = await createUserProfile(email, nickname);
-    await createUserLogin(newUserProfile.email, password);
-
-    const token = generateToken(newUserProfile.id);
-
-    res.status(201).json({ token });
-  } catch (error) {
-    res.status(500).json({ error: "회원가입 중 오류가 발생했습니다." });
-  }
-};
-
 // 유저 삭제 기능 (회원 탈퇴)
 export const deleteUser = async (
   req: Request,
@@ -78,9 +80,11 @@ export const deleteUser = async (
 ): Promise<void> => {
   const { email } = req.params;
 
+  console.log(email);
+
   try {
-    const user = await deleteUserProfile(email);
     await deleteUserLogin(email);
+    const user = await deleteUserProfile(email);
 
     res.status(200).json({ message: "유저가 삭제되었습니다.", user });
   } catch (error) {
