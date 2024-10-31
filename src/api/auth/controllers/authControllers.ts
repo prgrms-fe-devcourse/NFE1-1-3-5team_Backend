@@ -11,9 +11,29 @@ import {
 } from "../service/authService";
 import bcrypt from "bcrypt";
 
+// 회원가입 기능
+export const createUser = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const { email, password, nickname } = req.body;
+
+  try {
+    const newUserProfile = await createUserProfile(email, nickname);
+    await createUserLogin(newUserProfile.email, password);
+
+    const token = generateToken(newUserProfile.id);
+
+    res.status(201).json({ token });
+  } catch (error) {
+    res.status(500).json({ error: "회원가입 중 오류가 발생했습니다." });
+  }
+};
+
 // 로그인 기능
 export const loginUser = async (req: Request, res: Response): Promise<void> => {
   const { email, password } = req.body;
+  console.log(email, password);
 
   try {
     const userProfile = await findUserProfileByEmail(email);
@@ -31,6 +51,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
     }
 
     const isPasswordValid = await bcrypt.compare(password, userLogin.password);
+
     if (!isPasswordValid) {
       await updateUserLoginInfo(
         userProfile.email,
@@ -49,25 +70,6 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
     res.status(200).json({ token });
   } catch (error) {
     res.status(500).json({ error: "서버 오류가 발생했습니다." });
-  }
-};
-
-// 회원가입 기능
-export const registerUser = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
-  const { email, password, nickname } = req.body;
-
-  try {
-    const newUserProfile = await createUserProfile(email, nickname);
-    await createUserLogin(newUserProfile.email, password);
-
-    const token = generateToken(newUserProfile.id);
-
-    res.status(201).json({ token });
-  } catch (error) {
-    res.status(500).json({ error: "회원가입 중 오류가 발생했습니다." });
   }
 };
 
