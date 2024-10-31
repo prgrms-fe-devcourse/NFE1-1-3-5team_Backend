@@ -12,10 +12,10 @@ import bcrypt from "bcrypt";
 
 // 로그인 기능
 export const loginUser = async (req: Request, res: Response): Promise<void> => {
-  const { user_email, password } = req.body;
+  const { email, password } = req.body;
 
   try {
-    const userProfile = await findUserProfileByEmail(user_email);
+    const userProfile = await findUserProfileByEmail(email);
 
     if (!userProfile) {
       res.status(400).json({ error: "이메일 또는 비밀번호가 잘못되었습니다." });
@@ -48,10 +48,10 @@ export const registerUser = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const { user_email, password, nickname } = req.body;
+  const { email, password, nickname } = req.body;
 
   try {
-    const newUserProfile = await createUserProfile(user_email, nickname);
+    const newUserProfile = await createUserProfile(email, nickname);
     await createUserLogin(newUserProfile.email, password);
 
     const token = generateToken(newUserProfile.id);

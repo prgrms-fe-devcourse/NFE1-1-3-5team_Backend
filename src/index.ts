@@ -1,8 +1,12 @@
 import express, { Request, Response, Router } from "express";
+import cors from "cors";
 import auth from "./routes/auth";
 
 const app = express();
 const PORT = 3000;
+
+// CORS 설정
+app.use(cors());
 
 // 미들웨어 설정
 app.use(express.json());
