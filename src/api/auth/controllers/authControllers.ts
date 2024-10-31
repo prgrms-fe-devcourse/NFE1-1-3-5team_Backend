@@ -80,9 +80,11 @@ export const deleteUser = async (
 ): Promise<void> => {
   const { email } = req.params;
 
+  console.log(email);
+
   try {
-    const user = await deleteUserProfile(email);
     await deleteUserLogin(email);
+    const user = await deleteUserProfile(email);
 
     res.status(200).json({ message: "유저가 삭제되었습니다.", user });
   } catch (error) {
