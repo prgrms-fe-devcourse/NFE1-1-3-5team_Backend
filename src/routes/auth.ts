@@ -3,7 +3,7 @@ import {
   loginUser,
   registerUser,
   deleteUser,
-} from "../api/auth/controllers/userControllers";
+} from "../api/auth/controllers/authControllers";
 
 const router = Router();
 
