@@ -1,5 +1,5 @@
 import express, { Request, Response, Router } from "express";
-import auth from "./routes/authRoutes";
+import auth from "./routes/auth";
 
 const app = express();
 const PORT = 3000;
@@ -12,8 +12,8 @@ app.get("/", (_req: Request, res: Response) => {
   res.send("Express + TypeScript Server is running?");
 });
 
-// auth 라우트 등록
-app.use("/api", auth);
+// 사용자 라우트 설정
+app.use("/api/auth", auth);
 
 // 서버 실행
 app.listen(PORT, () => {

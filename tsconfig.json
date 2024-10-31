@@ -107,6 +107,6 @@
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
-  "include": ["src/**/*"], // 컴파일 대상 파일 설정
+  "include": ["src/**/*", "src/api/auth/controllers"], // 컴파일 대상 파일 설정
   "exclude": ["node_modules"] // 제외할 디렉터리
 }
