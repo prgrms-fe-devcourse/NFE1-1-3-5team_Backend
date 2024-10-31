@@ -4,6 +4,7 @@ import {
   findUserLoginByEmail,
   createUserProfile,
   createUserLogin,
+  updateUserLoginInfo,
   deleteUserProfile,
   deleteUserLogin,
   generateToken,
@@ -12,10 +13,10 @@ import bcrypt from "bcrypt";
 
 // 로그인 기능
 export const loginUser = async (req: Request, res: Response): Promise<void> => {
-  const { user_email, password } = req.body;
+  const { email, password } = req.body;
 
   try {
-    const userProfile = await findUserProfileByEmail(user_email);
+    const userProfile = await findUserProfileByEmail(email);
 
     if (!userProfile) {
       res.status(400).json({ error: "이메일 또는 비밀번호가 잘못되었습니다." });
@@ -31,9 +32,17 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 
     const isPasswordValid = await bcrypt.compare(password, userLogin.password);
     if (!isPasswordValid) {
+      await updateUserLoginInfo(
+        userProfile.email,
+        userLogin.is_first_login,
+        userLogin.last_logined_at,
+        userLogin.login_fail_count + 1
+      );
       res.status(400).json({ error: "이메일 또는 비밀번호가 잘못되었습니다." });
       return;
     }
+    // 로그인 성공 시 로그인 정보 업데이트
+    await updateUserLoginInfo(userProfile.email, false, new Date(), 0);
 
     const token = generateToken(userProfile.id);
 
@@ -48,10 +57,10 @@ export const registerUser = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const { user_email, password, nickname } = req.body;
+  const { email, password, nickname } = req.body;
 
   try {
-    const newUserProfile = await createUserProfile(user_email, nickname);
+    const newUserProfile = await createUserProfile(email, nickname);
     await createUserLogin(newUserProfile.email, password);
 
     const token = generateToken(newUserProfile.id);
