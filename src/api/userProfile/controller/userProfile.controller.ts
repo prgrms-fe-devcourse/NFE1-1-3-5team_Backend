@@ -5,6 +5,10 @@ import {
 } from "../service/userProfile.service";
 import { UserProfileResponseDto } from "../dto/UserProfileResponse.dto";
 import { UserProfileUpdateDto } from "../dto/UserProfileUpdate.dto";
+import {
+  CustomError,
+  InternalServerError,
+} from "../../../common/error/custom.error";
 
 export const getUserProfile = async (
   req: Request,
@@ -15,12 +19,22 @@ export const getUserProfile = async (
   try {
     const userProfile = await getUserProfileByEmail(email);
     const userProfileResponseDto = new UserProfileResponseDto(userProfile);
+
     res.status(200).json(userProfileResponseDto);
   } catch (error) {
-    res.status(500).json({
-      error:
-        (error as Error).message || `Error fetching user by email: ${email}`,
-    });
+    if (error instanceof CustomError) {
+      res.status(error.statusCode).json({ error: error.message });
+    } else {
+      // service와 repository에서 처리하지 못한 error (예상하지 못한 에러)
+      console.log(`Error fetching user by email: ${email}`, error);
+      const internalError = new InternalServerError(
+        `Error fetching user by email: ${email}`
+      );
+
+      res
+        .status(internalError.statusCode)
+        .json({ error: internalError.message });
+    }
   }
 };
 
@@ -42,6 +56,18 @@ export const patchUserProfile = async (
 
     res.status(200).json(userProfileResponseDto);
   } catch (error) {
-    res.status(500).json({ error: "유저 정보 수정 중 오류가 발생했습니다." });
+    if (error instanceof CustomError) {
+      res.status(error.statusCode).json({ error: error.message });
+    } else {
+      // service와 repository에서 처리하지 못한 error (예상하지 못한 에러)
+      console.log(`Error fetching user by email: ${email}`, error);
+      const internalError = new InternalServerError(
+        `Error fetching user by email: ${email}`
+      );
+
+      res
+        .status(internalError.statusCode)
+        .json({ error: internalError.message });
+    }
   }
 };

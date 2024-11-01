@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { UserProfileUpdateDto } from "../dto/UserProfileUpdate.dto";
+import { NotFoundError } from "../../../common/error/custom.error";
 
 const prisma = new PrismaClient();
 
@@ -9,7 +10,8 @@ export const findUserProfileByEmail = async (email: string) => {
   });
 
   if (!userProfile) {
-    throw new Error(`User with email ${email} not found`);
+    console.log(`User with email '${email}' not found`);
+    throw new NotFoundError(`User with email '${email}' not found`);
   }
 
   return userProfile;
@@ -22,7 +24,8 @@ export const updateUserProfile = async (
   const isUserProfileExist = await findUserProfileByEmail(email);
 
   if (!isUserProfileExist) {
-    throw new Error(`User with email ${email} not found`);
+    console.log(`User with email '${email}' not found`);
+    throw new NotFoundError(`User with email '${email}' not found`);
   }
 
   const updatedUserProfile = await prisma.userProfile.update({
