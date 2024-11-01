@@ -1,3 +1,7 @@
+import {
+  InternalServerError,
+  NotFoundError,
+} from "../../../common/error/custom.error";
 import { UserProfileUpdateDto } from "../dto/UserProfileUpdate.dto";
 import {
   findUserProfileByEmail,
@@ -10,12 +14,12 @@ export const getUserProfileByEmail = async (email: string) => {
 
     return userProfile;
   } catch (error) {
+    if (error instanceof NotFoundError) {
+      throw error;
+    }
+
     console.error(`Error fetching user by email: ${email}`, error);
-    throw new Error(
-      error instanceof Error
-        ? error.message
-        : `Error fetching user by email: ${email}`
-    );
+    throw new InternalServerError(`Error fetching user by email: ${email}`);
   }
 };
 
@@ -31,7 +35,11 @@ export const updateUserProfileByEmail = async (
 
     return updatedUserProfile;
   } catch (error) {
+    if (error instanceof NotFoundError) {
+      throw error;
+    }
+
     console.error(`Error updating user by email: ${email}`, error);
-    throw new Error(`Failed to update user by email: ${email}`);
+    throw new InternalServerError(`Error fetching user by email: ${email}`);
   }
 };
