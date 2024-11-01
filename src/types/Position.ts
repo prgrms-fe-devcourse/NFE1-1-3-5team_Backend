@@ -1,0 +1,12 @@
+export enum Position {
+  FRONTEND,
+  BACKEND,
+  FULLSTACK,
+  IOS,
+  ANDROID,
+  DEVOPS,
+  PM,
+  MARKETER,
+  DESIGNER,
+  PLANNER,
+}
