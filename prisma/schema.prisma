@@ -20,7 +20,7 @@ model UserProfile {
   nickname           String     // 유저닉네임
   position           Position?  // 직무
   affiliation        Affiliation?  // 소속
-  interests          Interests?  // 관심 분야 (기술 스택)
+  interests          Interest[]  // 관심 분야 (기술 스택)
   bio                String?    // 자기소개
   profile_image_url  String?    // 프로필 이미지
   like_post          String[]   // 관심 포스트 리스트
@@ -53,7 +53,7 @@ model Post {
   user_id           String   @db.ObjectId // 작성자ID(userProfile의 id와 동일 타입)
   title             String   // 게시글 제목
   content           String   // 게시글 내용
-  interests         Interests  // 관심 기술 스택
+  interests         Interest[]  // 관심 기술 스택
   position          Position  // 직무
   participation_method ParticipationMethod // 진행방법
   created_at        DateTime @default(now()) // 생성시간
@@ -133,7 +133,7 @@ enum Affiliation {
   JOBSEEKER
 }
 
-enum Interests {
+enum Interest {
   UNDETERMINED
   TYPESCRIPT
   JAVASCRIPT
