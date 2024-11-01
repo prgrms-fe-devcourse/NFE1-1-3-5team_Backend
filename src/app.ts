@@ -2,8 +2,8 @@ import express from "express";
 import cors from "cors";
 
 // 라우트 import하실 때 이름 이런식으로 작성해주세요
-import authRoutes from "./routes/authRoutes";
-import userProfileRoutes from "./routes/userProfileRoutes";
+import authRoutes from "./routes/auth.routes";
+import userProfileRoutes from "./routes/userProfile.routes";
 
 const app = express();
 const PORT = process.env.PORT || 3000;

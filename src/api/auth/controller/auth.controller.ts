@@ -8,7 +8,7 @@ import {
   deleteUserProfile,
   deleteUserLogin,
   generateToken,
-} from "../service/authService";
+} from "../service/auth.service";
 import bcrypt from "bcrypt";
 
 // 회원가입 기능
