@@ -8,4 +8,4 @@ export const findUserProfileByEmail = async (email: string) => {
   });
 };
 
-export const updateUserProfile = async () => {};
+export const updateUserProfile = async (email: string) => {};
