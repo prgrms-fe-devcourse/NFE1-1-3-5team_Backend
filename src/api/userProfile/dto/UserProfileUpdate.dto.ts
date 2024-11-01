@@ -2,9 +2,9 @@ import { Position, Affiliation, Interest } from "@prisma/client";
 
 export class UserProfileUpdateDto {
   nickname!: string;
-  position?: Position;
-  affiliation?: Affiliation;
-  bio?: string;
+  position?: Position | null;
+  affiliation?: Affiliation | null;
+  bio?: string | null;
   interests?: Interest[];
   updated_at!: Date;
 
