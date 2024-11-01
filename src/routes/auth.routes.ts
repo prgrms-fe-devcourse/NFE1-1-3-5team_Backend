@@ -4,7 +4,7 @@ import {
   createUser,
   loginUser,
   deleteUser,
-} from "../api/auth/controllers/authControllers";
+} from "../api/auth/controller/auth.controller";
 
 const router = express.Router();
 
