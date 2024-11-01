@@ -17,7 +17,10 @@ export const getUserProfile = async (
     const userProfileResponseDto = new UserProfileResponseDto(userProfile);
     res.status(200).json(userProfileResponseDto);
   } catch (error) {
-    res.status(500).json({ error: "유저 정보 조회 중 오류가 발생했습니다." });
+    res.status(500).json({
+      error:
+        (error as Error).message || `Error fetching user by email: ${email}`,
+    });
   }
 };
 
