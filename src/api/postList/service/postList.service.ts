@@ -1,13 +1,13 @@
-import * as postRepository from "../repository/mainPosts.repository";
-import { MainPostsRequestDto } from "../dto/mainPostsRequest.dto";
-import { MainPostsResponseDto } from "../dto/mainPostsResponse.dto";
+import * as postRepository from "../repository/postList.repository";
+import { postListRequestDto } from "../dto/postListRequest.dto";
+import { postListResponseDto } from "../dto/postListResponse.dto";
 
 export const getPostList = async (
-  filters: MainPostsRequestDto
-): Promise<MainPostsResponseDto[]> => {
+  filters: postListRequestDto
+): Promise<postListResponseDto[]> => {
   const queryFilters: any = {};
 
-  // 검색어 있는 경우
+  // 1. 검색어 있는 경우
   if (filters.searchTerm) {
     queryFilters.OR = [
       { title: { contains: filters.searchTerm, mode: "insensitive" } },
@@ -15,7 +15,7 @@ export const getPostList = async (
     ];
   }
 
-  // 필터링 조건이 있는 경우
+  // 2. 필터링 조건이 있는 경우
   if (filters.postType) queryFilters.type = filters.postType;
   if (filters.position) queryFilters.position = filters.position;
   if (filters.participationMethod)
@@ -24,8 +24,13 @@ export const getPostList = async (
     queryFilters.interests = { hasSome: filters.interests };
   }
 
-  // 작성글 조회할 경우
+  // 3. 작성글 조회할 경우
   if (filters.userId) queryFilters.user_id = filters.userId;
+
+  // 4. 관심글 조회할 경우
+  if (filters.postIds && filters.postIds.length > 0) {
+    queryFilters.id = { in: filters.postIds };
+  }
 
   // 페이지네이션
   const page = filters.page;

@@ -1,4 +1,4 @@
-export class MainPostsRequestDto {
+export class postListRequestDto {
   // 페이지 번호
   page: number;
   // 페이지당 게시글 수
@@ -14,10 +14,13 @@ export class MainPostsRequestDto {
   position?: string;
   // 진행 방식
   participationMethod?: string;
+
   // 작성자 ID
   userId?: string;
+  // 게시물 ID 리스트
+  postIds?: string[];
 
-  constructor(data: Partial<MainPostsRequestDto>) {
+  constructor(data: Partial<postListRequestDto>) {
     this.page = data.page || 1;
     this.limit = data.limit || 8;
     this.searchTerm = data.searchTerm;
@@ -26,5 +29,6 @@ export class MainPostsRequestDto {
     this.position = data.position;
     this.participationMethod = data.participationMethod;
     this.userId = data.userId;
+    this.postIds = data.postIds ?? [];
   }
 }

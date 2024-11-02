@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getPostList } from "../api/mainPosts/controller/mainPosts.controller";
+import { getPostList } from "../api/postList/controller/postList.controller";
 
 const router = Router();
 
