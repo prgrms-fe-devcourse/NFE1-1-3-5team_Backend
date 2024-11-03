@@ -9,6 +9,7 @@ import {
   deleteUserLogin,
   generateToken,
 } from "../service/auth.service";
+import { handleErrorResponse } from "../../../common/error/custom.errorHandler";
 import bcrypt from "bcrypt";
 
 // 회원가입 기능
@@ -26,7 +27,7 @@ export const createUser = async (
 
     res.status(201).json({ token });
   } catch (error) {
-    res.status(500).json({ error: "회원가입 중 오류가 발생했습니다." });
+    handleErrorResponse(error as Error, res, "createUser");
   }
 };
 
@@ -69,7 +70,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 
     res.status(200).json({ token, is_first_login: userLogin.is_first_login });
   } catch (error) {
-    res.status(500).json({ error: "서버 오류가 발생했습니다." });
+    handleErrorResponse(error as Error, res, "userLogin");
   }
 };
 
@@ -88,6 +89,6 @@ export const deleteUser = async (
 
     res.status(200).json({ message: "유저가 삭제되었습니다.", user });
   } catch (error) {
-    res.status(500).json({ error: "유저 삭제 중 오류가 발생했습니다." });
+    handleErrorResponse(error as Error, res, "deleteUser");
   }
 };
