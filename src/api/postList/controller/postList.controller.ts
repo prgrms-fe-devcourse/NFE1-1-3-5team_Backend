@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import * as postService from "../service/mainPosts.service";
-import { MainPostsRequestDto } from "../dto/mainPostsRequest.dto";
+import * as postService from "../service/postList.service";
+import { postListRequestDto } from "../dto/postListRequest.dto";
 import { handleErrorResponse } from "../../../common/error/custom.errorHandler";
 
 /**
@@ -14,7 +14,7 @@ export const getPostList = async (
   res: Response
 ): Promise<void> => {
   try {
-    const filters = new MainPostsRequestDto(req.body);
+    const filters = new postListRequestDto(req.body);
     const postList = await postService.getPostList(filters);
 
     res.status(200).json(postList);

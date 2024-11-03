@@ -1,4 +1,4 @@
-export interface MainPostsResponseDto {
+export interface postListResponseDto {
   // Post ID
   id: string;
   // 게시글 타입
