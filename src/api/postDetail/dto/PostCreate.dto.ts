@@ -9,6 +9,8 @@ import {
 } from "@prisma/client";
 
 export class PostCreateDto {
+  type!: PostType;
+  user_id!: string;
   title!: string;
   content!: string;
   interests!: Interest[];
@@ -27,6 +29,8 @@ export class PostCreateDto {
   available_time?: AvailableTime;
 
   constructor(data: Partial<PostCreateDto>, postType: PostType) {
+    this.type = postType!;
+    this.user_id = data.user_id!;
     this.title = data.title!;
     this.content = data.content!;
     this.interests = data.interests ?? [];

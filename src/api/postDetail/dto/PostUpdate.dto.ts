@@ -9,6 +9,8 @@ import {
 } from "@prisma/client";
 
 export class PostUpdateDto {
+  type!: PostType;
+  user_id!: string;
   title!: string;
   content!: string;
   interests!: Interest[];
