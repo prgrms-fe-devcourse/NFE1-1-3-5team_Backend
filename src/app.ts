@@ -6,6 +6,7 @@ import authRoutes from "./routes/auth.routes";
 import userProfileRoutes from "./routes/userProfile.routes";
 import postListRoutes from "./routes/postList.routes";
 import likePostRoutes from "./routes/likePost.routes";
+import postDetailRoutes from "./routes/postDetail.routes";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -24,6 +25,8 @@ app.use("/api/user-profile", userProfileRoutes);
 app.use("/api/postList", postListRoutes);
 // 관심글 라우트 설정
 app.use("/api/like-post", likePostRoutes);
+// 게시글 상세 라우트 설정
+app.use("/api/post-detail", postDetailRoutes);
 
 // 서버 실행
 app.listen(PORT, () => {
