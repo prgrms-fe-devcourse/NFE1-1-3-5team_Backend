@@ -68,7 +68,11 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 
     const token = generateToken(userProfile.id);
 
-    res.status(200).json({ token, is_first_login: userLogin.is_first_login });
+    res.status(200).json({
+      token,
+      is_first_login: userLogin.is_first_login,
+      nickname: userProfile.nickname,
+    });
   } catch (error) {
     handleErrorResponse(error as Error, res, "userLogin");
   }
