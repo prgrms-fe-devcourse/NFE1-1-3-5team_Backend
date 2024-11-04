@@ -11,12 +11,19 @@ import {
   InternalServerError,
   NotFoundError,
 } from "../../../common/error/custom.error";
+import { getUserObjectIdByEmail } from "../../userProfile/service/userProfile.service";
 
 export const createNewPost = async (
   postCreateDto: PostCreateDto
 ): Promise<Post> => {
   try {
     const newPost = await createPost(postCreateDto);
+
+    /**
+     *
+     */
+    // 사용자 id email에서 object id로 변환
+    newPost.user_id = (await getUserObjectIdByEmail(postCreateDto.user_id)).id;
 
     return newPost;
   } catch (error) {
