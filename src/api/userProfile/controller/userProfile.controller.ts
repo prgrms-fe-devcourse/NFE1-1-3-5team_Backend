@@ -14,7 +14,16 @@ export const getUserProfile = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const { email } = req.body;
+  const { email } = req.query;
+
+  if (!email || typeof email !== "string") {
+    const badRequestError = new CustomError("Invalid email", 400);
+
+    res
+      .status(badRequestError.statusCode)
+      .json({ error: badRequestError.message });
+    return;
+  }
 
   try {
     const userProfile = await getUserProfileByEmail(email);
