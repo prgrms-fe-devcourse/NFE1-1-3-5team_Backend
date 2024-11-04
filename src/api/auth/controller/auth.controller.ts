@@ -8,6 +8,7 @@ import {
   deleteUserProfile,
   deleteUserLogin,
   generateToken,
+  syncWithChatService,
 } from "../service/auth.service";
 import { handleErrorResponse } from "../../../common/error/custom.errorHandler";
 import bcrypt from "bcrypt";
@@ -22,6 +23,10 @@ export const createUser = async (
   try {
     const newUserProfile = await createUserProfile(email, nickname);
     await createUserLogin(newUserProfile.email, password);
+
+    if (newUserProfile) {
+      syncWithChatService(newUserProfile.email, newUserProfile.nickname);
+    }
 
     const token = generateToken(newUserProfile.id);
 

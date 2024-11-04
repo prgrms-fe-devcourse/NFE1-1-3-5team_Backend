@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import axios from "axios";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -67,4 +68,17 @@ export const generateToken = (userId: string) => {
   return jwt.sign({ userId }, process.env.JWT_SECRET as string, {
     expiresIn: "1h",
   });
+};
+
+export const syncWithChatService = async (
+  user_id: string,
+  user_nickname: string
+) => {
+  const userData = {
+    user_id: user_id, // user_id를 email로 설정
+    user_nickname: user_nickname, // nickname 사용
+  };
+  //SEVER URL은 임시
+  // /register/nickname API에 POST 요청
+  await axios.post("http://59.8.137.118:5172/register/nickname", userData);
 };
