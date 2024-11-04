@@ -25,6 +25,9 @@ export const createUser = async (
     await createUserLogin(newUserProfile.email, password);
 
     if (newUserProfile) {
+      /**
+       * TODO: 채팅서비스가 죽었을 경우 같이 죽는 문제 fix 필요
+       */
       syncWithChatService(newUserProfile.email, newUserProfile.nickname);
     }
 
