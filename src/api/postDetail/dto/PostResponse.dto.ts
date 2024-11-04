@@ -11,6 +11,7 @@ import {
 export class PostResponseDto {
   id!: string;
   type!: PostType;
+  user_id!: string;
   title!: string;
   content!: string;
   interests!: Interest[];
@@ -18,17 +19,18 @@ export class PostResponseDto {
   participation_method!: ParticipationMethod;
 
   // Project & Study Types
-  recruitment_capacity?: number;
-  duration?: Duration;
-  recruitment_deadline?: Date;
+  recruitment_capacity?: number | null;
+  duration?: Duration | null;
+  recruitment_deadline?: Date | null;
 
   // Meet Type
-  affiliation?: Affiliation;
-  available_time?: AvailableTime;
+  affiliation?: Affiliation | null;
+  available_time?: AvailableTime | null;
 
   constructor(data: Partial<PostResponseDto>) {
     this.id = data.id!;
     this.type = data.type!;
+    this.user_id = data.user_id!;
     this.title = data.title!;
     this.content = data.content!;
     this.interests = data.interests ?? [];
