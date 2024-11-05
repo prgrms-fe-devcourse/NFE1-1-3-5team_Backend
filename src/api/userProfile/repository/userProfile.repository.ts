@@ -35,3 +35,17 @@ export const updateUserProfile = async (
 
   return updatedUserProfile;
 };
+
+export const findUserObjectId = async (email: string) => {
+  const userObjecId = await prisma.userProfile.findUnique({
+    where: { email },
+    select: { id: true },
+  });
+
+  if (!userObjecId) {
+    console.log(`User with email '${email}' not found`);
+    throw new NotFoundError(`User with email '${email}' not found`);
+  }
+
+  return userObjecId;
+};
