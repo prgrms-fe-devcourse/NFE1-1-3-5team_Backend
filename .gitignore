@@ -1,7 +1,7 @@
 node_modules
 .env
-*.js
-dist
+# *.js
+# dist
 
 # dependencies
 yarn.lock
