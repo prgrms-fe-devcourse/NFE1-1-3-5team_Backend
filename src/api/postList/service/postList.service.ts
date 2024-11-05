@@ -4,7 +4,7 @@ import { postListResponseDto } from "../dto/postListResponse.dto";
 
 export const getPostList = async (
   filters: postListRequestDto
-): Promise<postListResponseDto[]> => {
+): Promise<{ postList: postListResponseDto[]; totalPage: number }> => {
   const queryFilters: any = {};
 
   // 1. 검색어 있는 경우
@@ -15,10 +15,12 @@ export const getPostList = async (
     ];
   }
 
-  // 2. 필터링 조건이 있는 경우
-  if (filters.postType) queryFilters.type = filters.postType;
-  if (filters.position) queryFilters.position = filters.position;
-  if (filters.participationMethod)
+  // 2. 필터링 조건이 있는 경우 && 전체 조회가 아닌 경우
+  if (filters.postType && filters.postType !== "ALL")
+    queryFilters.type = filters.postType;
+  if (filters.position && filters.position !== "ALL")
+    queryFilters.position = { hasSome: [filters.position] };
+  if (filters.participationMethod && filters.participationMethod !== "ALL")
     queryFilters.participation_method = filters.participationMethod;
   if (filters.interests && filters.interests.length > 0) {
     queryFilters.interests = { hasSome: filters.interests };
@@ -32,9 +34,20 @@ export const getPostList = async (
     queryFilters.id = { in: filters.postIds };
   }
 
+  // 5. 로그인했을 경우
+  const loginId = filters.loginId ? filters.loginId : null;
+  console.log(loginId);
+
   // 페이지네이션
   const page = filters.page;
   const limit = filters.limit;
 
-  return await postRepository.getPostList(queryFilters, page, limit);
+  const { postList, totalPage } = await postRepository.getPostList(
+    queryFilters,
+    loginId,
+    page,
+    limit
+  );
+
+  return { postList, totalPage };
 };
