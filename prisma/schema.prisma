@@ -15,12 +15,12 @@ generator client {
 
 
 model UserProfile {
-  user_id            String     @id @default(auto()) @map("_id") @db.ObjectId
-  user_email         String     @unique // 유저ID(이메일)
+  id                 String     @id @default(auto()) @map("_id") @db.ObjectId
+  email              String     @unique // 유저ID(이메일)
   nickname           String     // 유저닉네임
   position           Position?  // 직무
   affiliation        Affiliation?  // 소속
-  interests          Interests?  // 관심 분야 (기술 스택)
+  interests          Interest[]  // 관심 분야 (기술 스택)
   bio                String?    // 자기소개
   profile_image_url  String?    // 프로필 이미지
   like_post          String[]   // 관심 포스트 리스트
@@ -28,33 +28,33 @@ model UserProfile {
   updated_at         DateTime   @updatedAt // 수정시간
 
   // UserLogin과의 관계 설정 (1:1)
-  user_login         UserLogin  @relation(fields: [user_id], references: [user_id]) // UserLogin 참조
+  user_login         UserLogin? @relation("UserLoginRelation")
 
   // Post와의 관계 설정(1:N)
   posts              Post[]     @relation("UserPosts")
 }
 
 model UserLogin {
-  login_id           String     @id @default(auto()) @map("_id") @db.ObjectId
-  user_id            String     @unique @db.ObjectId // UserProfile과 동일한 ID 사용
+  id                 String     @id @default(auto()) @map("_id") @db.ObjectId
+  email              String     @unique // UserProfile과 동일한 ID 사용
   password           String     // 비밀번호
   is_first_login     Boolean    @default(true) // 첫 로그인 여부
   last_logined_at    DateTime?  // 마지막 로그인 시간
   login_fail_count   Int        @default(0) // 로그인 실패 횟수
 
   // UserProfile과의 관계 설정 (1:1)
-  user_profile       UserProfile?  @relation// UserProfile 참조
+  user_profile       UserProfile @relation("UserLoginRelation", fields: [email], references: [email])
 }
 
 
 model Post {
   id                String   @id @default(auto()) @map("_id") @db.ObjectId // Post ID
   type              PostType  // 게시글 타입: [프로젝트, 스터디, 모임]
-  user_id           String   @db.ObjectId// 작성자ID(userProfile의 user_id와 동일 타입)
+  user_id           String   @db.ObjectId // 작성자ID(userProfile의 id와 동일 타입)
   title             String   // 게시글 제목
   content           String   // 게시글 내용
-  interests         Interests  // 관심 기술 스택
-  position          Position  // 직무
+  interests         Interest[]  // 구하는 기술 스택
+  position          Position[]  // 구하는 직무
   participation_method ParticipationMethod // 진행방법
   created_at        DateTime @default(now()) // 생성시간
   updated_at        DateTime @updatedAt // 수정시간
@@ -69,7 +69,7 @@ model Post {
   available_time    AvailableTime?  // 가능한 시간대
 
   // UserProfile과의 관계 설정(N:1)
-  userProfile       UserProfile @relation("UserPosts", fields: [user_id], references: [user_id]) 
+  user_profile      UserProfile @relation("UserPosts", fields: [user_id], references: [id])
 }
 
 model Notification {
@@ -133,7 +133,7 @@ enum Affiliation {
   JOBSEEKER
 }
 
-enum Interests {
+enum Interest {
   UNDETERMINED
   TYPESCRIPT
   JAVASCRIPT
