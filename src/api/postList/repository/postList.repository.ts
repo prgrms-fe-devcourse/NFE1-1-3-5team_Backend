@@ -42,3 +42,14 @@ export const getPostList = async (
 
   return { postList, totalPage };
 };
+
+export const getUserId = async (
+  loginId: string
+): Promise<{ id: string | null }> => {
+  const user = await prisma.userProfile.findUnique({
+    where: { email: loginId },
+    select: { id: true },
+  });
+
+  return user ? user : { id: null };
+};
