@@ -53,8 +53,8 @@ model Post {
   user_id           String   @db.ObjectId // 작성자ID(userProfile의 id와 동일 타입)
   title             String   // 게시글 제목
   content           String   // 게시글 내용
-  interests         Interest[]  // 관심 기술 스택
-  position          Position  // 직무
+  interests         Interest[]  // 구하는 기술 스택
+  position          Position[]  // 구하는 직무
   participation_method ParticipationMethod // 진행방법
   created_at        DateTime @default(now()) // 생성시간
   updated_at        DateTime @updatedAt // 수정시간
