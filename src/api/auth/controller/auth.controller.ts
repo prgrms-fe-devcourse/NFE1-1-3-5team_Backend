@@ -8,6 +8,7 @@ import {
   deleteUserProfile,
   deleteUserLogin,
   generateToken,
+  syncWithChatService,
 } from "../service/auth.service";
 import { handleErrorResponse } from "../../../common/error/custom.errorHandler";
 import bcrypt from "bcrypt";
@@ -22,6 +23,13 @@ export const createUser = async (
   try {
     const newUserProfile = await createUserProfile(email, nickname);
     await createUserLogin(newUserProfile.email, password);
+
+    if (newUserProfile) {
+      /**
+       * TODO: 채팅서비스가 죽었을 경우 같이 죽는 문제 fix 필요
+       */
+      syncWithChatService(newUserProfile.email, newUserProfile.nickname);
+    }
 
     const token = generateToken(newUserProfile.id);
 
