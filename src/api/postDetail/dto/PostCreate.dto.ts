@@ -14,7 +14,7 @@ export class PostCreateDto {
   title!: string;
   content!: string;
   interests!: Interest[];
-  position!: Position;
+  position!: Position[];
   participation_method!: ParticipationMethod;
   created_at!: Date;
   updated_at!: Date;

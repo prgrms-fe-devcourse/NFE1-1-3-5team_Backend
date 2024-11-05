@@ -12,7 +12,7 @@ export interface postListResponseDto {
   // 기술 스택
   interests: string[];
   // 포지션
-  position: string;
+  position: string[];
   // 진행 방식
   participation_method: string;
   // 작성일
