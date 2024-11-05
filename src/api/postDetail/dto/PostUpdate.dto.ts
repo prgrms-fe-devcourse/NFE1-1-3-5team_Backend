@@ -14,7 +14,7 @@ export class PostUpdateDto {
   title!: string;
   content!: string;
   interests!: Interest[];
-  position!: Position;
+  position!: Position[];
   participation_method!: ParticipationMethod;
   updated_at!: Date;
 
