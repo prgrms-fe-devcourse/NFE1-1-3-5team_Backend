@@ -14,16 +14,21 @@ import {
 import { getUserObjectIdByEmail } from "../../userProfile/service/userProfile.service";
 
 export const createNewPost = async (
-  postCreateDto: PostCreateDto
+  postCreateDto: PostCreateDto,
+  email: string
 ): Promise<Post> => {
   try {
-    const newPost = await createPost(postCreateDto);
+    // 1. 이메일로 사용자 고유 ID 조회
+    const userProfile = await getUserObjectIdByEmail(email);
+    if (!userProfile) {
+      throw new NotFoundError("User profile not found");
+    }
 
-    /**
-     *
-     */
-    // 사용자 id email에서 object id로 변환
-    newPost.user_id = (await getUserObjectIdByEmail(postCreateDto.user_id)).id;
+    // 2. postCreateDto의 user_id를 ObjectId로 설정
+    postCreateDto.user_id = userProfile.id;
+
+    // 3. 변경된 postCreateDto로 새로운 포스트 생성
+    const newPost = await createPost(postCreateDto);
 
     return newPost;
   } catch (error) {
