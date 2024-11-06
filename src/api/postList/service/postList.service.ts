@@ -26,11 +26,6 @@ export const getPostList = async (
     queryFilters.interests = { hasSome: filters.interests };
   }
 
-  // 관심글 조회할 경우
-  if (filters.postIds && filters.postIds.length > 0) {
-    queryFilters.id = { in: filters.postIds };
-  }
-
   // 로그인했을 경우
   const loginId = filters.loginId ? filters.loginId : null;
 
@@ -40,9 +35,9 @@ export const getPostList = async (
 
   const { postList, totalPage } = await postRepository.getPostList(
     queryFilters,
-    loginId,
     page,
-    limit
+    limit,
+    loginId
   );
 
   return { postList, totalPage };
@@ -71,9 +66,33 @@ export const getMyPostList = async (
 
   const { postList, totalPage } = await postRepository.getPostList(
     queryFilters,
-    loginId,
     page,
-    limit
+    limit,
+    loginId
+  );
+
+  return { postList, totalPage };
+};
+
+export const getLikePostList = async (
+  filters: postListRequestDto
+): Promise<{ postList: postListResponseDto[]; totalPage: number }> => {
+  const queryFilters: any = {};
+
+  if (filters.postIds && filters.postIds.length > 0) {
+    queryFilters.id = { in: filters.postIds };
+  }
+
+  // 페이지네이션
+  const page = filters.page;
+  const limit = filters.limit;
+
+  const { postList, totalPage } = await postRepository.getPostList(
+    queryFilters,
+    page,
+    limit,
+    filters.loginId,
+    filters.postIds
   );
 
   return { postList, totalPage };
