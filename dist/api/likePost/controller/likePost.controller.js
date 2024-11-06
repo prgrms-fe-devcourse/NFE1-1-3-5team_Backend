@@ -48,10 +48,11 @@ const getUserLikePostList = (req, res) => __awaiter(void 0, void 0, void 0, func
     try {
         // 1. 사용자의 관심글로 저장된 postId 조회
         const request = new likePostRequest_dto_1.likePostRequestDto(req.body);
-        const postIds = yield likePostService.getUserLikePosts(request.email);
+        const postIds = yield likePostService.getUserLikePosts(request.loginId);
         // 2. 가져온 postId로 게시물 목록 조회
-        const postList = yield postService.getPostList(new postListRequest_dto_1.postListRequestDto({
+        const postList = yield postService.getLikePostList(new postListRequest_dto_1.postListRequestDto({
             postIds,
+            loginId: request.loginId,
             page: request.page,
             limit: request.limit,
         }));

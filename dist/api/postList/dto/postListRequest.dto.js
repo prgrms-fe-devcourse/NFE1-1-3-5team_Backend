@@ -13,6 +13,7 @@ class postListRequestDto {
         this.participationMethod = data.participationMethod;
         this.userId = data.userId;
         this.postIds = (_b = data.postIds) !== null && _b !== void 0 ? _b : [];
+        this.loginId = data.loginId;
     }
 }
 exports.postListRequestDto = postListRequestDto;
