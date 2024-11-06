@@ -8,6 +8,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deletePostDetail = exports.patchPostDetail = exports.getPostDetail = exports.postPostDetail = void 0;
 const postDetail_service_1 = require("../service/postDetail.service");
@@ -15,10 +26,16 @@ const PostCreate_dto_1 = require("../dto/PostCreate.dto");
 const PostUpdate_dto_1 = require("../dto/PostUpdate.dto");
 const custom_error_1 = require("../../../common/error/custom.error");
 const PostResponse_dto_1 = require("../dto/PostResponse.dto");
+const userProfile_service_1 = require("../../userProfile/service/userProfile.service");
 const postPostDetail = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const postCreateDto = new PostCreate_dto_1.PostCreateDto(req.body);
+    console.log("postPostDetail 함수에 도달했습니다.");
+    console.log("전체 req.body 확인:", req.body);
+    const _a = req.body, { user_id } = _a, postData = __rest(_a, ["user_id"]);
+    const email = user_id; //들어올 때는 user_id에 email이 들어있음
+    console.log("분리된 email:", email); // 이 부분에서 email이 제대로 출력되는지 확인합니다.
+    const postCreateDto = new PostCreate_dto_1.PostCreateDto(postData);
     try {
-        const newPost = yield (0, postDetail_service_1.createNewPost)(postCreateDto);
+        const newPost = yield (0, postDetail_service_1.createNewPost)(postCreateDto, email);
         const postResponseDto = new PostResponse_dto_1.PostResponseDto(newPost);
         res.status(201).json(postResponseDto);
     }
@@ -37,7 +54,7 @@ const postPostDetail = (req, res) => __awaiter(void 0, void 0, void 0, function*
 });
 exports.postPostDetail = postPostDetail;
 const getPostDetail = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { postId } = req.query;
+    const { id: postId } = req.params; // req.query 대신 req.params 사용
     if (!postId || typeof postId !== "string") {
         const badRequestError = new custom_error_1.CustomError("Invalid post id", 400);
         res
@@ -65,8 +82,17 @@ const getPostDetail = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 });
 exports.getPostDetail = getPostDetail;
 const patchPostDetail = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { postId } = req.body;
-    const postUpdateDto = new PostUpdate_dto_1.PostUpdateDto(req.body);
+    console.log("patchPostDetail 함수 호출됨");
+    const { id: postId } = req.params;
+    console.log("postId 내용:", postId);
+    // `user_id`를 기존의 email값에서 진짜 id로 변환해서 맞춰줘야 post 동작이 정상적으로 돌아가네
+    const userProfile = yield (0, userProfile_service_1.getUserObjectIdByEmail)(req.body.user_id);
+    console.log("userProfile 내용:", userProfile);
+    console.log("req.body 내용:", req.body);
+    const userId = userProfile.id;
+    console.log("userId 내용:", userId);
+    const postUpdateDto = new PostUpdate_dto_1.PostUpdateDto(Object.assign(Object.assign({}, req.body), { user_id: userId }));
+    console.log("postUpdateDto 내용:", postUpdateDto);
     if (!postId || typeof postId !== "string") {
         const badRequestError = new custom_error_1.CustomError("Invalid post id", 400);
         res
@@ -75,7 +101,10 @@ const patchPostDetail = (req, res) => __awaiter(void 0, void 0, void 0, function
         return;
     }
     try {
+        console.log("updatePostById 호출 직전"); // `updatePostById` 호출 직전 로그
+        console.log("전송할 업데이트 데이터:", postUpdateDto); // 실제 전송되는 데이터 확인
         const updatedPost = yield (0, postDetail_service_1.updatePostById)(postId, postUpdateDto);
+        console.log("updatePostById 호출 후");
         const postResponseDto = new PostResponse_dto_1.PostResponseDto(updatedPost);
         res.status(200).json(postResponseDto);
     }
