@@ -27,6 +27,12 @@ export class PostResponseDto {
   affiliation?: Affiliation | null;
   available_time?: AvailableTime | null;
 
+  user_profile: {
+    email: string;
+    profile_image_url: string;
+    nickname: string;
+  } | null = null;
+
   constructor(data: Partial<PostResponseDto>) {
     this.id = data.id!;
     this.type = data.type!;
@@ -47,6 +53,14 @@ export class PostResponseDto {
     if (data.type === "MEET") {
       this.affiliation = data.affiliation;
       this.available_time = data.available_time;
+    }
+    // user_profile 초기화
+    if (data.user_profile) {
+      this.user_profile = {
+        email: data.user_profile.email,
+        profile_image_url: data.user_profile.profile_image_url,
+        nickname: data.user_profile.nickname,
+      };
     }
   }
 }
