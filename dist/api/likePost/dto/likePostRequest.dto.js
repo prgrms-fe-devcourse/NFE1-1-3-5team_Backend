@@ -2,13 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateLikePostRequestDto = exports.likePostRequestDto = void 0;
 class likePostRequestDto {
-    // 게시글 아이디 (관심글 추가/삭제 시 사용)
-    // postId?: string;
     constructor(data) {
         this.page = data.page || 1;
         this.limit = data.limit || 12;
-        this.email = data.email;
-        // this.postId = data.postId;
+        this.loginId = data.loginId;
     }
 }
 exports.likePostRequestDto = likePostRequestDto;

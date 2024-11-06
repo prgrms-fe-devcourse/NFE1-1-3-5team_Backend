@@ -5,4 +5,6 @@ const postList_controller_1 = require("../api/postList/controller/postList.contr
 const router = (0, express_1.Router)();
 // 게시글 목록 조회
 router.post("/", postList_controller_1.getPostList);
+// 작성글 목록 조회
+router.post("/my-posts", postList_controller_1.getMyPostList);
 exports.default = router;
