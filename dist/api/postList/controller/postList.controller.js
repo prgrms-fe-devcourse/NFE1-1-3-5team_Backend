@@ -32,7 +32,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getPostList = void 0;
+exports.getMyPostList = exports.getPostList = void 0;
 const postService = __importStar(require("../service/postList.service"));
 const postListRequest_dto_1 = require("../dto/postListRequest.dto");
 const custom_errorHandler_1 = require("../../../common/error/custom.errorHandler");
@@ -45,11 +45,28 @@ const custom_errorHandler_1 = require("../../../common/error/custom.errorHandler
 const getPostList = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const filters = new postListRequest_dto_1.postListRequestDto(req.body);
-        const postList = yield postService.getPostList(filters);
-        res.status(200).json(postList);
+        const { postList, totalPage } = yield postService.getPostList(filters);
+        res.status(200).json({ postList, totalPage });
     }
     catch (error) {
         (0, custom_errorHandler_1.handleErrorResponse)(error, res, "getPostList");
     }
 });
 exports.getPostList = getPostList;
+/**
+ * @description 로그인된 사용자의 작성글 리스트 조회
+ * @param {Request} req 필터링 조건을 포함
+ * @param {Response} res 조회된 게시글 목록 반환
+ * @returns {Promise<void>}
+ */
+const getMyPostList = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const filters = new postListRequest_dto_1.postListRequestDto(req.body);
+        const { postList, totalPage } = yield postService.getMyPostList(filters);
+        res.status(200).json({ postList, totalPage });
+    }
+    catch (error) {
+        (0, custom_errorHandler_1.handleErrorResponse)(error, res, "getMyPostList");
+    }
+});
+exports.getMyPostList = getMyPostList;

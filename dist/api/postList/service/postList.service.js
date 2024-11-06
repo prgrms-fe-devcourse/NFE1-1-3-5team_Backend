@@ -32,37 +32,65 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getPostList = void 0;
+exports.getLikePostList = exports.getMyPostList = exports.getPostList = void 0;
 const postRepository = __importStar(require("../repository/postList.repository"));
 const getPostList = (filters) => __awaiter(void 0, void 0, void 0, function* () {
     const queryFilters = {};
-    // 1. 검색어 있는 경우
+    // 검색어 있는 경우
     if (filters.searchTerm) {
         queryFilters.OR = [
             { title: { contains: filters.searchTerm, mode: "insensitive" } },
             { content: { contains: filters.searchTerm, mode: "insensitive" } },
         ];
     }
-    // 2. 필터링 조건이 있는 경우
-    if (filters.postType)
+    // 필터링 조건이 있는 경우 && 전체 조회가 아닌 경우
+    if (filters.postType && filters.postType !== "ALL")
         queryFilters.type = filters.postType;
-    if (filters.position)
-        queryFilters.position = filters.position;
-    if (filters.participationMethod)
+    if (filters.position && filters.position !== "ALL")
+        queryFilters.position = { hasSome: [filters.position] };
+    if (filters.participationMethod && filters.participationMethod !== "ALL")
         queryFilters.participation_method = filters.participationMethod;
     if (filters.interests && filters.interests.length > 0) {
         queryFilters.interests = { hasSome: filters.interests };
     }
-    // 3. 작성글 조회할 경우
-    if (filters.userId)
-        queryFilters.user_id = filters.userId;
-    // 4. 관심글 조회할 경우
+    // 로그인했을 경우
+    const loginId = filters.loginId ? filters.loginId : null;
+    // 페이지네이션
+    const page = filters.page;
+    const limit = filters.limit;
+    const { postList, totalPage } = yield postRepository.getPostList(queryFilters, page, limit, loginId);
+    return { postList, totalPage };
+});
+exports.getPostList = getPostList;
+const getMyPostList = (filters) => __awaiter(void 0, void 0, void 0, function* () {
+    const queryFilters = {};
+    // 사용자 이메일로 사용자 id 고유값 가지고 옴
+    if (filters.loginId) {
+        const userProfileId = yield postRepository.getUserId(filters.loginId);
+        if (userProfileId) {
+            queryFilters.user_id = userProfileId.id;
+        }
+        else {
+            throw new Error("User not found");
+        }
+    }
+    const loginId = filters.loginId ? filters.loginId : null;
+    // 페이지네이션
+    const page = filters.page;
+    const limit = filters.limit;
+    const { postList, totalPage } = yield postRepository.getPostList(queryFilters, page, limit, loginId);
+    return { postList, totalPage };
+});
+exports.getMyPostList = getMyPostList;
+const getLikePostList = (filters) => __awaiter(void 0, void 0, void 0, function* () {
+    const queryFilters = {};
     if (filters.postIds && filters.postIds.length > 0) {
         queryFilters.id = { in: filters.postIds };
     }
     // 페이지네이션
     const page = filters.page;
     const limit = filters.limit;
-    return yield postRepository.getPostList(queryFilters, page, limit);
+    const { postList, totalPage } = yield postRepository.getPostList(queryFilters, page, limit, filters.loginId, filters.postIds);
+    return { postList, totalPage };
 });
-exports.getPostList = getPostList;
+exports.getLikePostList = getLikePostList;

@@ -35,8 +35,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.removeUserLikePost = exports.addUserLikePost = exports.getUserLikePosts = void 0;
 const likePostRepository = __importStar(require("../repository/likePost.repository"));
 const custom_error_1 = require("../../../common/error/custom.error");
-const getUserLikePosts = (email) => __awaiter(void 0, void 0, void 0, function* () {
-    const postIds = yield likePostRepository.getUserLikePosts(email);
+const getUserLikePosts = (loginId) => __awaiter(void 0, void 0, void 0, function* () {
+    const postIds = yield likePostRepository.getUserLikePosts(loginId);
     if (postIds.length === 0) {
         throw new custom_error_1.CustomError("Not found user liked posts", 404);
     }
@@ -44,15 +44,15 @@ const getUserLikePosts = (email) => __awaiter(void 0, void 0, void 0, function* 
 });
 exports.getUserLikePosts = getUserLikePosts;
 const addUserLikePost = (request) => __awaiter(void 0, void 0, void 0, function* () {
-    yield likePostRepository.addUserLikePost(request.email, request.postId);
+    yield likePostRepository.addUserLikePost(request.loginId, request.postId);
 });
 exports.addUserLikePost = addUserLikePost;
 const removeUserLikePost = (request) => __awaiter(void 0, void 0, void 0, function* () {
     // 1. 사용자의 관심글 목록 조회
-    const currentLikePosts = yield likePostRepository.getUserLikePosts(request.email);
+    const currentLikePosts = yield likePostRepository.getUserLikePosts(request.loginId);
     // 2. 사용자의 관심글 목록에서 제거
     const updateLikePosts = currentLikePosts.filter((id) => id !== request.postId);
     // 3. 사용자의 관심글 목록 업데이트
-    yield likePostRepository.removeUserLikePost(request.email, updateLikePosts);
+    yield likePostRepository.removeUserLikePost(request.loginId, updateLikePosts);
 });
 exports.removeUserLikePost = removeUserLikePost;
