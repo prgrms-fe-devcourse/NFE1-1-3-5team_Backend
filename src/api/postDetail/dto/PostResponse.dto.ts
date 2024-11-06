@@ -17,7 +17,7 @@ export class PostResponseDto {
   interests!: Interest[];
   position!: Position[];
   participation_method!: ParticipationMethod;
-
+  created_at!: Date;
   // Project & Study Types
   recruitment_capacity?: number | null;
   duration?: Duration | null;
@@ -42,7 +42,7 @@ export class PostResponseDto {
     this.interests = data.interests ?? [];
     this.position = data.position!;
     this.participation_method = data.participation_method!;
-
+    this.created_at = data.created_at!;
     // 조건부 필드 초기화
     if (data.type === "PROJECT" || data.type === "STUDY") {
       this.recruitment_capacity = data.recruitment_capacity;
