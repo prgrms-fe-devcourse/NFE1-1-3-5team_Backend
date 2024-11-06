@@ -15,9 +15,9 @@ export const getPostList = async (
 ): Promise<void> => {
   try {
     const filters = new postListRequestDto(req.body);
-    const postList = await postService.getPostList(filters);
+    const { postList, totalPage } = await postService.getPostList(filters);
 
-    res.status(200).json(postList);
+    res.status(200).json({ postList, totalPage });
   } catch (error) {
     handleErrorResponse(error as Error, res, "getPostList");
   }

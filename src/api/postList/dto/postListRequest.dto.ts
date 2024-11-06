@@ -20,6 +20,9 @@ export class postListRequestDto {
   // 게시물 ID 리스트
   postIds?: string[];
 
+  // 로그인 사용자 ID
+  loginId?: string;
+
   constructor(data: Partial<postListRequestDto>) {
     this.page = data.page || 1;
     this.limit = data.limit || 8;
@@ -30,5 +33,6 @@ export class postListRequestDto {
     this.participationMethod = data.participationMethod;
     this.userId = data.userId;
     this.postIds = data.postIds ?? [];
+    this.loginId = data.loginId;
   }
 }
