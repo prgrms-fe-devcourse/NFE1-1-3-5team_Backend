@@ -21,12 +21,13 @@ export const getUserLikePostList = async (
   try {
     // 1. 사용자의 관심글로 저장된 postId 조회
     const request = new likePostRequestDto(req.body);
-    const postIds = await likePostService.getUserLikePosts(request.email);
+    const postIds = await likePostService.getUserLikePosts(request.loginId);
 
     // 2. 가져온 postId로 게시물 목록 조회
-    const postList = await postService.getPostList(
+    const postList = await postService.getLikePostList(
       new postListRequestDto({
         postIds,
+        loginId: request.loginId,
         page: request.page,
         limit: request.limit,
       })

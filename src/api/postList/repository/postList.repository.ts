@@ -6,9 +6,10 @@ const prisma = new PrismaClient();
 
 export const getPostList = async (
   filters: any,
-  loginId: string | null,
   page: number,
-  limit: number
+  limit: number,
+  loginId?: string | null,
+  likePostIds?: string[]
 ): Promise<{ postList: postListResponseDto[]; totalPage: number }> => {
   const skip = (page - 1) * limit;
 
@@ -31,11 +32,18 @@ export const getPostList = async (
   });
 
   // 3. 로그인한 사용자의 관심글 목록 조회해서 데이터 재생성
-  const likePostIds = loginId ? await getUserLikePosts(loginId) : "";
+  const finalLikePostIds = loginId
+    ? likePostIds || (await getUserLikePosts(loginId))
+    : [];
   const postList = postListData.map((post: postListResponseDto) => ({
     ...post,
-    isLiked: loginId ? likePostIds.includes(post.id) : false,
+    isLiked: loginId ? finalLikePostIds.includes(post.id) : false,
   }));
+  // const likePostIds = loginId ? await getUserLikePosts(loginId) : "";
+  // const postList = postListData.map((post: postListResponseDto) => ({
+  //   ...post,
+  //   isLiked: loginId ? likePostIds.includes(post.id) : false,
+  // }));
 
   // 4. 전체 페이지 수
   const totalPage = Math.ceil(totalPosts / limit);
