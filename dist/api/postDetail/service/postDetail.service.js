@@ -13,14 +13,17 @@ exports.deletePostById = exports.updatePostById = exports.getPostById = exports.
 const postDetail_repository_1 = require("../repository/postDetail.repository");
 const custom_error_1 = require("../../../common/error/custom.error");
 const userProfile_service_1 = require("../../userProfile/service/userProfile.service");
-const createNewPost = (postCreateDto) => __awaiter(void 0, void 0, void 0, function* () {
+const createNewPost = (postCreateDto, email) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        // 1. 이메일로 사용자 고유 ID 조회
+        const userProfile = yield (0, userProfile_service_1.getUserObjectIdByEmail)(email);
+        if (!userProfile) {
+            throw new custom_error_1.NotFoundError("User profile not found");
+        }
+        // 2. postCreateDto의 user_id를 ObjectId로 설정
+        postCreateDto.user_id = userProfile.id;
+        // 3. 변경된 postCreateDto로 새로운 포스트 생성
         const newPost = yield (0, postDetail_repository_1.createPost)(postCreateDto);
-        /**
-         *
-         */
-        // 사용자 id email에서 object id로 변환
-        newPost.user_id = (yield (0, userProfile_service_1.getUserObjectIdByEmail)(postCreateDto.user_id)).id;
         return newPost;
     }
     catch (error) {

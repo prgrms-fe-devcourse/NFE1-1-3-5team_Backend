@@ -80,7 +80,7 @@ const generateToken = (userId) => {
 exports.generateToken = generateToken;
 const syncWithChatService = (user_id, user_nickname) => __awaiter(void 0, void 0, void 0, function* () {
     const userData = {
-        user_id: user_id,
+        user_id: user_id, // user_id를 email로 설정
         user_nickname: user_nickname, // nickname 사용
     };
     //SEVER URL은 임시
