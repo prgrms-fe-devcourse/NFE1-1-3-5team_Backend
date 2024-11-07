@@ -9,6 +9,7 @@ import {
   CustomError,
   InternalServerError,
 } from "../../../common/error/custom.error";
+import { syncWithChatService } from "../../auth/service/auth.service";
 
 export const getUserProfile = async (
   req: Request,
@@ -59,6 +60,13 @@ export const patchUserProfile = async (
       email,
       userProfileUpdateDto
     );
+    //채팅 서비스와 닉네임 연동
+    await syncWithChatService(
+      updatedUserProfile.email,
+      updatedUserProfile.nickname,
+      updatedUserProfile.profile_image_index
+    );
+
     const userProfileResponseDto = new UserProfileResponseDto(
       updatedUserProfile
     );

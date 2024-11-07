@@ -14,6 +14,7 @@ const userProfile_service_1 = require("../service/userProfile.service");
 const UserProfileResponse_dto_1 = require("../dto/UserProfileResponse.dto");
 const UserProfileUpdate_dto_1 = require("../dto/UserProfileUpdate.dto");
 const custom_error_1 = require("../../../common/error/custom.error");
+const auth_service_1 = require("../../auth/service/auth.service");
 const getUserProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email } = req.query;
     if (!email || typeof email !== "string") {
@@ -48,6 +49,8 @@ const patchUserProfile = (req, res) => __awaiter(void 0, void 0, void 0, functio
     const userProfileUpdateDto = new UserProfileUpdate_dto_1.UserProfileUpdateDto(req.body);
     try {
         const updatedUserProfile = yield (0, userProfile_service_1.updateUserProfileByEmail)(email, userProfileUpdateDto);
+        //채팅 서비스와 닉네임 연동
+        yield (0, auth_service_1.syncWithChatService)(updatedUserProfile.email, updatedUserProfile.nickname, updatedUserProfile.profile_image_index);
         const userProfileResponseDto = new UserProfileResponse_dto_1.UserProfileResponseDto(updatedUserProfile);
         res.status(200).json(userProfileResponseDto);
     }
