@@ -79,7 +79,7 @@ export const getLikePostList = async (
 ): Promise<{ postList: postListResponseDto[]; totalPage: number }> => {
   const queryFilters: any = {};
 
-  if (filters.postIds && filters.postIds.length > 0) {
+  if (filters.postIds && filters.postIds.length >= 0) {
     queryFilters.id = { in: filters.postIds };
   }
 
