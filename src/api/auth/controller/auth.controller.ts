@@ -80,6 +80,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
       token,
       is_first_login: userLogin.is_first_login,
       nickname: userProfile.nickname,
+      profile_image_index: userProfile.profile_image_index,
     });
   } catch (error) {
     handleErrorResponse(error as Error, res, "userLogin");

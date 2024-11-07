@@ -64,6 +64,7 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             token,
             is_first_login: userLogin.is_first_login,
             nickname: userProfile.nickname,
+            profile_image_index: userProfile.profile_image_index,
         });
     }
     catch (error) {
