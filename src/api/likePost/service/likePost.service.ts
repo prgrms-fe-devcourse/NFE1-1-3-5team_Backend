@@ -4,9 +4,9 @@ import { CustomError } from "../../../common/error/custom.error";
 
 export const getUserLikePosts = async (loginId: string): Promise<string[]> => {
   const postIds = await likePostRepository.getUserLikePosts(loginId);
-  if (postIds.length === 0) {
-    throw new CustomError("Not found user liked posts", 404);
-  }
+  // if (postIds.length === 0) {
+  //   throw new CustomError("Not found user liked posts", 404);
+  // }
   return postIds;
 };
 
