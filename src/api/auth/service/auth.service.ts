@@ -76,11 +76,13 @@ export const generateToken = (userId: string) => {
 
 export const syncWithChatService = async (
   user_id: string,
-  user_nickname: string
+  user_nickname: string,
+  profile_image_index: number
 ) => {
   const userData = {
     user_id: user_id, // user_id를 email로 설정
     user_nickname: user_nickname, // nickname 사용
+    profile_image_index: profile_image_index, //프로필 이미지 전달
   };
   //SEVER URL은 임시
   // /register/nickname API에 POST 요청
