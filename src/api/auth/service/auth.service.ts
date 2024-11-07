@@ -80,5 +80,5 @@ export const syncWithChatService = async (
   };
   //SEVER URL은 임시
   // /register/nickname API에 POST 요청
-  await axios.post("http://59.8.137.118:5172/register/nickname", userData);
+  await axios.post("https://jwjwjw.store:5172/register/nickname", userData);
 };
