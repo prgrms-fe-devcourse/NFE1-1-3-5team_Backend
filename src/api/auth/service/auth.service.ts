@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import axios from "axios";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { generateRandomProfileIndex } from "../../../util/profileIndexGenerator";
 
 const prisma = new PrismaClient();
 
@@ -18,10 +19,13 @@ export const findUserLoginByEmail = async (email: string) => {
 };
 
 export const createUserProfile = async (email: string, nickname: string) => {
+  const profile_image_index = generateRandomProfileIndex();
+
   return prisma.userProfile.create({
     data: {
       email,
       nickname,
+      profile_image_index,
     },
   });
 };
