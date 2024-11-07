@@ -29,7 +29,7 @@ export class PostResponseDto {
 
   user_profile: {
     email: string;
-    profile_image_url: string;
+    profile_image_index: number;
     nickname: string;
   } | null = null;
 
@@ -58,7 +58,7 @@ export class PostResponseDto {
     if (data.user_profile) {
       this.user_profile = {
         email: data.user_profile.email,
-        profile_image_url: data.user_profile.profile_image_url,
+        profile_image_index: data.user_profile.profile_image_index,
         nickname: data.user_profile.nickname,
       };
     }
