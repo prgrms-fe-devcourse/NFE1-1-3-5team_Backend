@@ -8,6 +8,7 @@ class UserProfileResponseDto {
         this.affiliation = data.affiliation;
         this.bio = data.bio;
         this.interests = data.interests;
+        this.profile_image_index = data.profile_image_index;
     }
 }
 exports.UserProfileResponseDto = UserProfileResponseDto;

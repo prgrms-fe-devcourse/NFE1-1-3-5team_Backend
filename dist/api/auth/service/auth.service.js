@@ -17,6 +17,7 @@ const client_1 = require("@prisma/client");
 const axios_1 = __importDefault(require("axios"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const profileIndexGenerator_1 = require("../../../util/profileIndexGenerator");
 const prisma = new client_1.PrismaClient();
 const findUserProfileByEmail = (email) => __awaiter(void 0, void 0, void 0, function* () {
     return prisma.userProfile.findUnique({
@@ -31,10 +32,12 @@ const findUserLoginByEmail = (email) => __awaiter(void 0, void 0, void 0, functi
 });
 exports.findUserLoginByEmail = findUserLoginByEmail;
 const createUserProfile = (email, nickname) => __awaiter(void 0, void 0, void 0, function* () {
+    const profile_image_index = (0, profileIndexGenerator_1.generateRandomProfileIndex)();
     return prisma.userProfile.create({
         data: {
             email,
             nickname,
+            profile_image_index,
         },
     });
 });
