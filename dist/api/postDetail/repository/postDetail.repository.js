@@ -26,7 +26,7 @@ const findPostById = (postId) => __awaiter(void 0, void 0, void 0, function* () 
             user_profile: {
                 select: {
                     email: true,
-                    profile_image_url: true, // 필요한 필드만 선택
+                    profile_image_index: true, // 필요한 필드만 선택
                     nickname: true, // 작성자 닉네임
                 },
             },
