@@ -34,12 +34,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.removeUserLikePost = exports.addUserLikePost = exports.getUserLikePosts = void 0;
 const likePostRepository = __importStar(require("../repository/likePost.repository"));
-const custom_error_1 = require("../../../common/error/custom.error");
 const getUserLikePosts = (loginId) => __awaiter(void 0, void 0, void 0, function* () {
     const postIds = yield likePostRepository.getUserLikePosts(loginId);
-    if (postIds.length === 0) {
-        throw new custom_error_1.CustomError("Not found user liked posts", 404);
-    }
+    // if (postIds.length === 0) {
+    //   throw new CustomError("Not found user liked posts", 404);
+    // }
     return postIds;
 });
 exports.getUserLikePosts = getUserLikePosts;
