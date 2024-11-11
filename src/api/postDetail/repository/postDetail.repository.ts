@@ -15,9 +15,20 @@ export const createPost = async (
   });
 };
 
-export const findPostById = async (postId: string): Promise<Post> => {
+export const findPostById = async (
+  postId: string
+): Promise<Post & { user_profile: { email: string; nickname: string } }> => {
   const post = await prisma.post.findUnique({
     where: { id: postId },
+    include: {
+      user_profile: {
+        select: {
+          email: true,
+          profile_image_index: true, // 필요한 필드만 선택
+          nickname: true, // 작성자 닉네임
+        },
+      },
+    },
   });
 
   if (!post) {

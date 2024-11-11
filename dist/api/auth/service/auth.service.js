@@ -17,6 +17,7 @@ const client_1 = require("@prisma/client");
 const axios_1 = __importDefault(require("axios"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const profileIndexGenerator_1 = require("../../../util/profileIndexGenerator");
 const prisma = new client_1.PrismaClient();
 const findUserProfileByEmail = (email) => __awaiter(void 0, void 0, void 0, function* () {
     return prisma.userProfile.findUnique({
@@ -31,10 +32,12 @@ const findUserLoginByEmail = (email) => __awaiter(void 0, void 0, void 0, functi
 });
 exports.findUserLoginByEmail = findUserLoginByEmail;
 const createUserProfile = (email, nickname) => __awaiter(void 0, void 0, void 0, function* () {
+    const profile_image_index = (0, profileIndexGenerator_1.generateRandomProfileIndex)();
     return prisma.userProfile.create({
         data: {
             email,
             nickname,
+            profile_image_index,
         },
     });
 });
@@ -78,13 +81,14 @@ const generateToken = (userId) => {
     });
 };
 exports.generateToken = generateToken;
-const syncWithChatService = (user_id, user_nickname) => __awaiter(void 0, void 0, void 0, function* () {
+const syncWithChatService = (user_id, user_nickname, profile_image_index) => __awaiter(void 0, void 0, void 0, function* () {
     const userData = {
         user_id: user_id, // user_id를 email로 설정
         user_nickname: user_nickname, // nickname 사용
+        profile_image_index: profile_image_index, //프로필 이미지 전달
     };
     //SEVER URL은 임시
     // /register/nickname API에 POST 요청
-    yield axios_1.default.post("http://59.8.137.118:5172/register/nickname", userData);
+    yield axios_1.default.post("https://jwjwjw.store:5172/register/nickname", userData);
 });
 exports.syncWithChatService = syncWithChatService;

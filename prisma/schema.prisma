@@ -22,7 +22,8 @@ model UserProfile {
   affiliation        Affiliation?  // 소속
   interests          Interest[]  // 관심 분야 (기술 스택)
   bio                String?    // 자기소개
-  profile_image_url  String?    // 프로필 이미지
+  // profile_image_url  String?    // 프로필 이미지
+  profile_image_index Int
   like_post          String[]   // 관심 포스트 리스트
   created_at         DateTime   @default(now()) // 생성시간
   updated_at         DateTime   @updatedAt // 수정시간
@@ -169,6 +170,7 @@ enum Interest {
 }
 
 enum ParticipationMethod {
+  ALL
   ONLINE
   OFFLINE
   HYBRID

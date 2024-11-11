@@ -28,7 +28,11 @@ export const createUser = async (
       /**
        * TODO: 채팅서비스가 죽었을 경우 같이 죽는 문제 fix 필요
        */
-      syncWithChatService(newUserProfile.email, newUserProfile.nickname);
+      syncWithChatService(
+        newUserProfile.email,
+        newUserProfile.nickname,
+        newUserProfile.profile_image_index
+      );
     }
 
     const token = generateToken(newUserProfile.id);
@@ -80,6 +84,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
       token,
       is_first_login: userLogin.is_first_login,
       nickname: userProfile.nickname,
+      profile_image_index: userProfile.profile_image_index,
     });
   } catch (error) {
     handleErrorResponse(error as Error, res, "userLogin");

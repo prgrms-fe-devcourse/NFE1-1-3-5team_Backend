@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import axios from "axios";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { generateRandomProfileIndex } from "../../../util/profileIndexGenerator";
 
 const prisma = new PrismaClient();
 
@@ -18,10 +19,13 @@ export const findUserLoginByEmail = async (email: string) => {
 };
 
 export const createUserProfile = async (email: string, nickname: string) => {
+  const profile_image_index = generateRandomProfileIndex();
+
   return prisma.userProfile.create({
     data: {
       email,
       nickname,
+      profile_image_index,
     },
   });
 };
@@ -72,13 +76,15 @@ export const generateToken = (userId: string) => {
 
 export const syncWithChatService = async (
   user_id: string,
-  user_nickname: string
+  user_nickname: string,
+  profile_image_index: number
 ) => {
   const userData = {
     user_id: user_id, // user_id를 email로 설정
     user_nickname: user_nickname, // nickname 사용
+    profile_image_index: profile_image_index, //프로필 이미지 전달
   };
   //SEVER URL은 임시
   // /register/nickname API에 POST 요청
-  await axios.post("http://59.8.137.118:5172/register/nickname", userData);
+  await axios.post("https://jwjwjw.store:5172/register/nickname", userData);
 };

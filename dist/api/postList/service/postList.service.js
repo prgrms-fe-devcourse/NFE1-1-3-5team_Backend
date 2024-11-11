@@ -84,7 +84,7 @@ const getMyPostList = (filters) => __awaiter(void 0, void 0, void 0, function* (
 exports.getMyPostList = getMyPostList;
 const getLikePostList = (filters) => __awaiter(void 0, void 0, void 0, function* () {
     const queryFilters = {};
-    if (filters.postIds && filters.postIds.length > 0) {
+    if (filters.postIds && filters.postIds.length >= 0) {
         queryFilters.id = { in: filters.postIds };
     }
     // 페이지네이션

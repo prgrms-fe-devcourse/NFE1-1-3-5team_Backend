@@ -27,7 +27,10 @@ const getPostList = (filters, page, limit, loginId, likePostIds) => __awaiter(vo
         orderBy: { created_at: "desc" },
         include: {
             user_profile: {
-                select: { nickname: true },
+                select: {
+                    nickname: true,
+                    profile_image_index: true,
+                },
             },
         },
     });

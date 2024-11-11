@@ -22,6 +22,15 @@ exports.createPost = createPost;
 const findPostById = (postId) => __awaiter(void 0, void 0, void 0, function* () {
     const post = yield prisma.post.findUnique({
         where: { id: postId },
+        include: {
+            user_profile: {
+                select: {
+                    email: true,
+                    profile_image_index: true, // 필요한 필드만 선택
+                    nickname: true, // 작성자 닉네임
+                },
+            },
+        },
     });
     if (!post) {
         console.log(`Post with id '${postId}' not found`);

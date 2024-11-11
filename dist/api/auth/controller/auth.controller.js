@@ -26,7 +26,7 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             /**
              * TODO: 채팅서비스가 죽었을 경우 같이 죽는 문제 fix 필요
              */
-            (0, auth_service_1.syncWithChatService)(newUserProfile.email, newUserProfile.nickname);
+            (0, auth_service_1.syncWithChatService)(newUserProfile.email, newUserProfile.nickname, newUserProfile.profile_image_index);
         }
         const token = (0, auth_service_1.generateToken)(newUserProfile.id);
         res.status(201).json({ token });
@@ -64,6 +64,7 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             token,
             is_first_login: userLogin.is_first_login,
             nickname: userProfile.nickname,
+            profile_image_index: userProfile.profile_image_index,
         });
     }
     catch (error) {

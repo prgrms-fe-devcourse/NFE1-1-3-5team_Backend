@@ -142,8 +142,8 @@ export const deletePostDetail = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const { postId } = req.query;
-
+  const { id: postId } = req.params;
+  console.log("deletePostDetail 함수 호출됨", postId);
   if (!postId || typeof postId !== "string") {
     const badRequestError = new CustomError("Invalid post id", 400);
 

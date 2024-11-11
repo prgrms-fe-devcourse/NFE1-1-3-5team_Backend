@@ -123,7 +123,8 @@ const patchPostDetail = (req, res) => __awaiter(void 0, void 0, void 0, function
 });
 exports.patchPostDetail = patchPostDetail;
 const deletePostDetail = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { postId } = req.query;
+    const { id: postId } = req.params;
+    console.log("deletePostDetail 함수 호출됨", postId);
     if (!postId || typeof postId !== "string") {
         const badRequestError = new custom_error_1.CustomError("Invalid post id", 400);
         res
